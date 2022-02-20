@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("./head.ejs",{title:"blog"}) %>
+</head>
+
+<body>
+    <div class="m-2 justify-content-between">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            نوشتن مقاله
+          </button>
+
+        <a class="btn btn-primary" href="/home/">بازگشت به خانه</a>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <form action="/blog/create" method="post">
+                <div class="modal-footer">
+                    <div class="form-floating mb-3">
+                        <label for="repeatPaswordInput">عنوان :</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder=" عنوان">
+                        <p id="repeatPaswordvalid"></p>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="repeatPaswordInput">متن:</label>
+                        <input type="text" class="form-control" name="content" id="content" placeholder="متن">
+                        <p id="repeatPaswordvalid"></p>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-primary">ذخیره کردن</button>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+        <% for( let index=0 ; index < articles.length; index++ ) { %>
+            <div dir="rtl" class="card" style="width: 100%">
+                <div dir="rtl" class="card-body">
+                    <h5 dir="rtl" class="card-title">
+                        <%=articles[ index].title  %>: عنوان</h5>
+                    <hr>
+                    <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
+                        <%=articles[ index].createdAt  %>: نوشته شده در
+                    </h6>
+                    <hr>
+                    <p dir="rtl" class="card-text">
+                        <%=articles[ index].content %>
+                    </p>
+                    <hr>
+                    <p dir="rtl" class="card-text">
+                        <%=articles[ index].author %>
+                    </p>
+                    <hr>
+                    <div>
+                        لایک کامنت ویو دیس لایک
+                    </div>
+                </div>
+            </div>
+            <br>
+            <% } %>
+    </div>
+</body>
+
+</html>

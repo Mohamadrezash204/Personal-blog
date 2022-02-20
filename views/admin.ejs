@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("./head.ejs",{title:"users"}) %>
+</head>
+
+<body style="position: relative">
+    <a class="btn btn-primary " style="position: absolute" href="/home">بازگشت به خانه</a>
+    <div class="justify-content-between">
+        <% for( let index=0 ; index < users.length; index++ ) { %>
+            <div dir="rtl" class="card col-sm-12 col-md-8 col-lg-5 mx-auto">
+                <div dir="rtl" class="card-body">
+                    <h5 dir="rtl" class="card-title">
+                        نام :
+                        <%=users[ index].firstName %>
+                            <hr> نام خانوادگی :
+                            <%=users[ index].lastName %>
+                    </h5>
+                    <hr>
+                    <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
+                        وارد شده در :
+                        <%=users[ index].createdAt  %>
+                    </h6>
+                    <hr>
+                    <p dir="rtl" class="card-text">
+                        تلفن همراه :
+                        <%= users[ index].phone %>
+                    </p>
+                    <hr>
+                    <p>
+                        جنسیت‌:
+                        <%= users[ index].gender %>
+                    </p>
+                    <hr>
+                    <p class="card-text">
+                        وضعیت :
+                        <%= users[ index].role %>
+                    </p>
+                    <hr>
+
+                    <form action="dashbord/update" method="post"><a class="btn btn-primary m-2">بازنشانی رمز عبور</a></form>
+
+                </div>
+            </div>
+            <br>
+            <% } %>
+    </div>
+
+</body>
+
+</html>

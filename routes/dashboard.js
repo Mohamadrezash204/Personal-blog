@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Users = require("../models/users");
-const { isLoggedIn } = require('../middlewares/auth')
+const { isLoggedIn, isAdmin } = require('../middlewares/auth')
 const { updateUser, deleteUser } = require('../controller/dashboard')
 const generalTools = require("../utils/multerAvatar")
 const fs = require('fs')
@@ -15,6 +15,14 @@ router.post('/update', isLoggedIn, updateUser)
 
 router.get("/uploadAvatar", function(req, res) {
     res.render("avatar")
+})
+router.post('/reset', isAdmin, function(req, res) {
+    Users.findByIdAndUpdate(req.body._id, { password: req.body.phone },
+        function(err, docs) {
+            if (err) return res.send(err);
+            res.redirect("/admin")
+        })
+
 })
 router.post('/uploadAvatar', isLoggedIn, (req, res) => {
     const user = req.session.user

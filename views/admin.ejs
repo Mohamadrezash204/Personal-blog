@@ -39,7 +39,10 @@
                     </p>
                     <hr>
 
-                    <form action="dashbord/update" method="post"><a class="btn btn-primary m-2">بازنشانی رمز عبور</a></form>
+                    <form action="dashboard/reset" method="post">
+                        <input type="hidden" name="_id" value="<%=users[index]._id%>" />
+                        <input type="hidden" name="phone" value="<%=users[index].phone%>" />
+                        <button type="submit" class="btn btn-primary m-2">بازنشانی رمز عبور</a></form>
 
                 </div>
             </div>

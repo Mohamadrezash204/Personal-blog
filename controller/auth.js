@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const User = require('../models/users');
 
 function loginpage(req, res) {
@@ -14,10 +14,15 @@ function login(req, res) {
     User.findOne({ "username": `${req.body.username}` }, function(err, user) {
         if (err) return res.send(err)
         if (!user) return res.send("does not exist");
-        if (!(bcrypt.compare(req.body.password, user.password))) return res.send("the password is incorrect");
-        //res.send("ok")
-        req.session.user = user;
-        return res.redirect('/home');
+        bcrypt.compare(req.body.password, user.password, function(err, result) {
+            if (err) { throw (err); }
+            if (result) {
+                req.session.user = user;
+                return res.redirect('/home')
+            }
+            return res.send("the password is incorrect");
+        });
+
     })
 }
 
@@ -42,7 +47,6 @@ function register(req, res) {
             // return res.send({ success: true, message: 'User created.' });
         }
     })
-
 
 }
 

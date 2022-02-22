@@ -1,14 +1,21 @@
+const bcrypt = require("bcrypt")
+const Users = require("../models/users")
+
 function updateUser(req, res) {
     const user = req.session.user;
     //console.log(user);
     let edituser = {}
     req.body.username ? edituser.username = req.body.username : null;
-    req.body.password ? edituser.password = req.body.password : null;
     req.body.firstName ? edituser.firstName = req.body.firstName : null;
     req.body.lastName ? edituser.lastName = req.body.lastName : null;
     req.body.phone ? edituser.phone = req.body.phone : null;
     req.body.gender ? edituser.gender = req.body.gender : null;
-
+    if (req.body.password) {
+        bcrypt.hash(req.body.password, 10, function(err, hash) {
+            if (err) return (err);
+            edituser.password = hash;
+        });
+    }
     Users.findByIdAndUpdate(user._id, edituser,
         function(err, docs) {
             if (err) {

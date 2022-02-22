@@ -13,23 +13,18 @@ router.get("/", isLoggedIn, function(req, res) {
 router.post("/delete", isLoggedIn, deleteUser)
 router.post('/update', isLoggedIn, updateUser)
 
-router.get("/uploadAvatar", function(req, res) {
-    res.render("avatar")
-})
 router.post('/reset', isAdmin, function(req, res) {
     Users.findByIdAndUpdate(req.body._id, { password: req.body.phone },
         function(err, docs) {
             if (err) return res.send(err);
             res.redirect("/admin")
         })
-
 })
 router.post('/uploadAvatar', isLoggedIn, (req, res) => {
     const user = req.session.user
     const upload = generalTools.upload.single('avatar');
 
     upload(req, res, function(err) {
-
         if (err) {
             console.log(err);
             return res.status(500).json({ msg: "err" })
@@ -50,8 +45,8 @@ router.post('/uploadAvatar', isLoggedIn, (req, res) => {
                     }
                 })
         } else {
-            const filePath = path.join(__dirname, `../public/${user.avatar}`)
-            fs.unlink(filePath)
+            // const filePath = path.join(__dirname, `../public/${user.avatar}`)
+            // fs.unlink(filePath)
             Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` },
                 function(err, docs) {
                     if (err) {

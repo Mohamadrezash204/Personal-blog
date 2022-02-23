@@ -13,7 +13,7 @@
                 <div class="card border-0 shadow rounded-3 my-5">
                     <div class="card-body p-4 p-sm-5">
                         <h5 class="card-title text-center mb-5 fw-light fs-5">ثبت نام</h5>
-                        <form method="post" action="/auth/register">
+                        <form method="post" action="/auth/register" enctype="multipart/form-data">
 
                             <div class="form-floating mb-3">
                                 <label for="firstNameInput">نام</label>
@@ -58,9 +58,9 @@
                                 <p id="Usernamevalid"></p>
                             </div>
                             <div class="form-floating mb-3">
-                                <label for="repeatPaswordInput">عکس کاربری</label>
+                                <label for="avatar">عکس کاربری</label>
                                 <input type="file" class="form-control" name="avatar" id="avatar" placeholder="محل قرار دادن عکس">
-                                <p id="repeatPaswordvalid"></p>
+                                <p id="avatar"></p>
                             </div>
 
 

@@ -4,6 +4,7 @@ const Users = require("../models/users")
 function updateUser(req, res) {
     const user = req.session.user;
     //console.log(user);
+
     let edituser = {}
     req.body.username ? edituser.username = req.body.username : null;
     req.body.firstName ? edituser.firstName = req.body.firstName : null;

@@ -34,5 +34,9 @@ const articleSchema = new Schema({
         ref: 'User',
         required: true
     },
+    top: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 module.exports = mongoose.model('Article', articleSchema);

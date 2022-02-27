@@ -13,7 +13,7 @@ routes.get('/', function(req, res) {
 routes.use("/home", home);
 routes.use("/auth", auth);
 routes.use("/blog", isLoggedIn, blog);
-routes.use("/admin", isAdmin, admin);
+routes.use("/admin", isLoggedIn, isAdmin, admin);
 routes.use('/dashboard', dashboard);
 
 module.exports = routes;

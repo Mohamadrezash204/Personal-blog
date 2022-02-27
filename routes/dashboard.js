@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Users = require("../models/users");
 const { isLoggedIn, isAdmin } = require('../middlewares/auth')
-const { updateUser, deleteUser, uploadAvatar } = require('../controller/dashboard')
+const { updateUser, deleteUser, uploadAvatar, reset } = require('../controller/dashboard')
 
 
 router.get("/", isLoggedIn, function(req, res) {
@@ -11,13 +11,8 @@ router.get("/", isLoggedIn, function(req, res) {
 router.post("/delete", deleteUser)
 router.post('/update', updateUser)
 
-router.post('/reset', isAdmin, function(req, res) {
-    Users.findByIdAndUpdate(req.body._id, { password: req.body.phone },
-        function(err, docs) {
-            if (err) return res.send(err);
-            res.redirect("/admin")
-        })
-})
 router.post('/uploadAvatar', isLoggedIn, uploadAvatar)
+
+router.post('/reset', isLoggedIn, isAdmin, reset)
 
 module.exports = router;

@@ -7,6 +7,52 @@
 
 <body>
     <%- include("./navbar.ejs") %>
+        <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+            <% for( let index=0 ; index <= articles.length; index++ ) { %>
+                <div dir="rtl" class="card" style="width: 100%">
+                    <div dir="rtl" class="card-body">
+                        <h5 dir="rtl" class="card-title">
+                            <%=articles[ index].title  %>: عنوان</h5>
+                        <hr>
+                        <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
+                            <%=articles[ index].createdAt  %>: نوشته شده در
+                        </h6>
+                        <hr>
+                        <p dir="rtl" class="card-text">
+                            <%=articles[ index].content %>
+                        </p>
+                        <hr>
+                        <p dir="rtl" class="card-text">
+                            <%=articles[ index].author %>
+                        </p>
+                        <hr>
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <p>بازدید ها :
+                                    <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
+                                </p>
+                                <p> پسندیده :
+                                    <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
+                                </p>
+                                <p>ناپسندیده :
+                                    <button type="button" class="btn btn-danger" id="dislikebutton"><%= articles[ index].dislike %> </button>
+                                </p>
+                            </div>
+                            <hr>
+                            <div>
+                                <p>کامنت ها :</p>
+                                <div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <% } %>
+        </div>
+
+
 
 </body>
 

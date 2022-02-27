@@ -2,14 +2,47 @@
 <html lang="en">
 
 <head>
-    <%- include("./head.ejs",{title : "My Articles"}) %>
+    <%- include("./head.ejs",{title:"blog"}) %>
 </head>
 
 <body>
+    <div class="m-2 justify-content-between">
+        <div class="d-flex justify-content-between is-position-absolute">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            نوشتن مقاله
+          </button>
+
+            <a class="btn btn-primary" href="/home/">بازگشت به خانه</a>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <form action="/blog/create" method="post">
+                <div class="modal-footer">
+                    <div class="form-floating mb-3">
+                        <label for="repeatPaswordInput">عنوان :</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder=" عنوان">
+                        <p id="repeatPaswordvalid"></p>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="repeatPaswordInput">متن:</label>
+                        <input type="text" class="form-control" name="content" id="content" placeholder="متن">
+                        <p id="repeatPaswordvalid"></p>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="submit" class="btn btn-primary">ذخیره کردن</button>
+            </form>
+            </div>
+        </div>
+    </div>
+
     <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
         <% for( let index=0 ; index < articles.length; index++ ) { %>
             <div dir="rtl" class="card" style="width: 100%">
                 <div dir="rtl" class="card-body">
+                    <h3>{
+                        <%= index+1 %> /
+                            <%= articles.length %>}</h3>
+                    <hr>
                     <h5 dir="rtl" class="card-title">
                         <%=articles[ index].title  %>: عنوان</h5>
                     <hr>
@@ -22,19 +55,74 @@
                     </p>
                     <hr>
                     <p dir="rtl" class="card-text">
+                        نوشته شده توسط :
                         <%=articles[ index].author %>
                     </p>
                     <hr>
                     <div>
-                        لایک کامنت ویو دیس لایک
+                        <div class="d-flex justify-content-between">
+                            <p>بازدید ها :
+                                <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
+                            </p>
+                            <p> پسندیده :
+                                <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
+                            </p>
+                            <p>ناپسندیده :
+                                <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
+                            </p>
+                        </div>
+                        <hr>
+                        <div>
+
+                            <input type="hidden" name="_id" value="<%=articles[index]._id%>" />
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                   ویرایش
+                                  </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <form action="/blog/editArticle" method="post">
+                                            <div class="modal-footer">
+                                                <input type="hidden" name="_id" value="<%=articles[index]._id%>" />
+                                                <div class="form-floating mb-3">
+                                                    <label for="repeatPaswordInput">عنوان :</label>
+                                                    <input type="text" class="form-control" name="title" id="title" placeholder="<%=articles[ index].title  %>">
+                                                    <p id="repeatPaswordvalid"></p>
+                                                </div>
+                                                <div class="form-floating mb-3">
+                                                    <label for="repeatPaswordInput">متن:</label>
+                                                    <input type="text" class="form-control" name="content" id="content" placeholder="<%=articles[ index].content %> ">
+                                                    <p id="repeatPaswordvalid"></p>
+                                                </div>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                <button type="submit" class="btn btn-primary">ذخیره کردن</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div>
+                            <p>کامنت ها :</p>
+                            <div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <br>
             <% } %>
     </div>
-
-
 </body>
 
 </html>

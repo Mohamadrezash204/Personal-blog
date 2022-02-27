@@ -11,6 +11,11 @@
         <% for( let index=0 ; index < users.length; index++ ) { %>
             <div dir="rtl" class="card col-sm-12 col-md-8 col-lg-5 mx-auto">
                 <div dir="rtl" class="card-body">
+                    <h4 dir="rtl" class="card-title">
+                        نام کاربری :
+                        <%= users[index].username  %>
+                    </h4>
+                    <hr>
                     <h5 dir="rtl" class="card-title">
                         نام :
                         <%=users[ index].firstName %>
@@ -38,11 +43,17 @@
                         <%= users[ index].role %>
                     </p>
                     <hr>
-
-                    <form action="dashboard/reset" method="post">
+                    <div class="d-flex justify-content-between">
+                        <form action="dashboard/reset" method="post">
+                            <input type="hidden" name="_id" value="<%=users[index]._id%>" />
+                            <input type="hidden" name="phone" value="<%=users[index].phone%>" />
+                            <button type="submit" class="btn btn-primary m-2">بازنشانی رمز عبور</a>
+                    </form>
+                    <form action="dashboard/delete" method="post">
                         <input type="hidden" name="_id" value="<%=users[index]._id%>" />
-                        <input type="hidden" name="phone" value="<%=users[index].phone%>" />
-                        <button type="submit" class="btn btn-primary m-2">بازنشانی رمز عبور</a></form>
+                        <button type="submit" class="btn btn-primary m-2">حذف اکانت</a>
+                    </form>
+                    </div>
 
                 </div>
             </div>

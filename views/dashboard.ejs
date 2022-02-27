@@ -17,9 +17,9 @@
                         <div class="modal-content">
                             <form action="/dashboard/uploadAvatar" method="post" enctype="multipart/form-data">
                                 <div class="form-floating mb-3">
-                                    <label for="repeatPaswordInput">عکس کاربری</label>
+                                    <label for="avatar">عکس کاربری</label>
                                     <input type="file" class="form-control" name="avatar" id="avatar" placeholder="محل قرار دادن عکس">
-                                    <p id="repeatPaswordvalid"></p>
+                                    <p id="avatar"></p>
                                 </div>
                                 <button type="submit" class="btn btn-primary">ok</button>
                             </form>
@@ -51,15 +51,14 @@
                 <form action="/home/" method="get">
                     <button type="submit" class="btn btn-primary">بازگشت به خانه </button> </form>
 
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">حذف</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm">حذف اکانت</button>
 
-                        <div dir="rtl" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
+                        <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <a><br></a>
                                     <a>ایا برای حذف اکانت اطمینان دارید ؟</a>
                                     <hr>
-
                                     <form method="post" action="dashboard/delete"><button type="submit" class="btn btn-danger">حذف</button></form>
                                 </div>
                             </div>

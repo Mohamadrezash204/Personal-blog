@@ -17,32 +17,38 @@
                         <%= status %>
                     </a>
                 </li>
-                <li class="nav-item dropdown ">
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <% if(status !== "ورود"){ %>
+                    <li class="nav-item dropdown ">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           سایر
                         </a>
 
-                        <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item text-light" href="blog/myArticles">نوشته های من</a>
-                            <a class="dropdown-item text-light" href="#">Another action</a>
-                            <a class="dropdown-item text-light" href="#">Something else here</a>
+                            <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuLink">
+
+                                <form action="/blog/myArticles" method="get"><button type="submit" class="dropdown-item text-light">نوشته های من</button></form>
+
+                                <a class="dropdown-item text-light" href="#">Another action</a>
+
+                                <form action="/auth/logout" method="get"><button type="submit" class="dropdown-item text-light">خارج شدن از حساب</button></form>
+
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                    <% } %>
 
-                <li class="nav-item">
-                    <a class="nav-link disabled">
-                        <%=`${role} : ${firstName} ${lastName} `%>
-                            <img class="nav-img avatar" src='<%= avatar %>'>
-                    </a>
+                        <li class="nav-item">
+                            <p class="nav-link disabled">
+                                <%=`${role} : ${firstName} ${lastName} `%>
+                                    <img class="nav-img avatar" src='<%= avatar %>'>
+                            </p>
 
-                </li>
+                        </li>
             </ul>
         </div>
         <form class="form-inline my-2 my-lg-0 justify-content-between ">
             <input class="form-conte mr-sm-2 ml-2" type="search " placeholder="جستجو " aria-label="جستجو ">
-            <button class="btn btn-outline-success my-2 my-sm-0 " type="submit ">جستجو</button>
+            <button class="btn btn-outline-success m-1 my-sm-0 " type="submit"> جستجو </button>
         </form>
     </div>
 </nav>

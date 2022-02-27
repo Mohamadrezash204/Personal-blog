@@ -7,12 +7,13 @@
 
 <body>
     <div class="m-2 justify-content-between">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        <div class="d-flex justify-content-between is-position-absolute">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
             نوشتن مقاله
           </button>
 
-        <a class="btn btn-primary" href="/home/">بازگشت به خانه</a>
-
+            <a class="btn btn-primary" href="/home/">بازگشت به خانه</a>
+        </div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <form action="/blog/create" method="post">
@@ -38,11 +39,15 @@
         <% for( let index=0 ; index < articles.length; index++ ) { %>
             <div dir="rtl" class="card" style="width: 100%">
                 <div dir="rtl" class="card-body">
+                    <h3>{
+                        <%= index+1 %> /
+                            <%= articles.length %>}</h3>
+                    <hr>
                     <h5 dir="rtl" class="card-title">
                         <%=articles[ index].title  %>: عنوان</h5>
                     <hr>
                     <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
-                        <%=articles[ index].createdAt  %>: نوشته شده در
+                        <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>: نوشته شده در
                     </h6>
                     <hr>
                     <p dir="rtl" class="card-text">
@@ -50,11 +55,29 @@
                     </p>
                     <hr>
                     <p dir="rtl" class="card-text">
-                        <%=articles[ index].author %>
+                        نوشته شده توسط :
+                        <%=articles[ index].author.firstName + " " + articles[ index ].author.lastName%>
                     </p>
                     <hr>
                     <div>
-                        لایک کامنت ویو دیس لایک
+                        <div class="d-flex justify-content-between">
+                            <p>بازدید ها :
+                                <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
+                            </p>
+                            <p> پسندیده :
+                                <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
+                            </p>
+                            <p>ناپسندیده :
+                                <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
+                            </p>
+                        </div>
+                        <hr>
+                        <div>
+                            <p>کامنت ها :</p>
+                            <div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

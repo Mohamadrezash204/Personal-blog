@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt")
 const Users = require("../models/users")
+const fs = require("fs")
+const path = require("path")
+const generalTools = require("../utils/multerAvatar")
 
 function updateUser(req, res) {
     const user = req.session.user;
@@ -33,15 +36,69 @@ function updateUser(req, res) {
 }
 
 function deleteUser(req, res) {
-    const user = req.session.user;
-    Users.findByIdAndDelete(user._id, function(err, docs) {
+    let userid;
+    if (req.session.user.role === 'admin') { userid = req.body._id } else { userid = req.session.user._id };
+
+    Users.findByIdAndDelete(userid, function(err, docs) {
         if (err) {
             console.log(err)
         } else {
-            res.send({ success: true, message: `deleted ${docs}` })
-            res.redirect("/auth/register")
+            if (req.session.user.role === "admin") {
+                res.redirect("/admin")
+            } else {
+                res.send({ success: true, message: `deleted ${docs}` })
+                res.redirect("/auth/register")
+
+            }
+
         }
 
     });
 }
-module.exports = { updateUser, deleteUser }
+
+function uploadAvatar(req, res) {
+    const user = req.session.user
+    const upload = generalTools.upload.single('avatar');
+
+    upload(req, res, function(err) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ msg: "err" })
+        }
+        // res.redirect("/dashboard")
+        if (user.avatar === './images/avatar/avatar.jpg') {
+            Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` },
+                function(err, docs) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        Users.findById(user._id, function(err, docs) {
+                            if (err) return res.send({ success: false, masage: err })
+                            req.session.user = docs;
+                            return res.redirect('/dashboard')
+
+                        })
+                    }
+                })
+        } else {
+            fs.unlinkSync(path.join(__dirname, `../public`, req.session.user.avatar))
+            Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` },
+                function(err, docs) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        Users.findById(user._id, function(err, docs) {
+                            if (err) return res.send({ success: false, masage: err })
+                            req.session.user = docs;
+                            return res.redirect('/dashboard')
+
+                        })
+                    }
+                })
+
+        }
+
+    })
+}
+
+module.exports = { updateUser, deleteUser, uploadAvatar }

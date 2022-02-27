@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/users');
+const generalTools = require('../utils/multerAvatar')
 
 function loginpage(req, res) {
 
@@ -34,19 +35,36 @@ function registerpage(req, res) {
 }
 
 function register(req, res) {
-
-    User.findOne({ username: req.body.username }, function(err, user) {
-        if (err) return res.send({ masage: err });
-        if (user) return res.send({ success: false, message: 'This user existed.' });
-    })
-    User.create(req.body, function(err, result) {
-        if (err) return res.send({ success: false, message: err });
-        if (result) {
-            res.redirect("/auth/login");
-            //or
-            // return res.send({ success: true, message: 'User created.' });
+    const upload = generalTools.upload.single('avatar');
+    upload(req, res, function(err) {
+        if (err) {
+            return res.send(err)
         }
+        User.findOne({ username: req.body.username }, function(err, user) {
+            if (err) return res.send({ masage: err });
+            if (user) return res.send({ success: false, message: 'This user existed.' });
+        })
+        const newUser = {}
+        if (req.file) {
+            newUser.avatar = `./images/avatar/${req.file.filename}`
+        }
+        newUser.username = req.body.username
+        newUser.firstName = req.body.firstName
+        newUser.lastName = req.body.lastName
+        newUser.phone = req.body.phone
+        newUser.password = req.body.password
+        newUser.role = req.body.role
+        newUser.gender = req.body.gender
+        User.create(newUser, function(err, result) {
+            if (err) return res.send({ success: false, message: err });
+            if (result) {
+                res.redirect("/auth/login");
+                //or
+                // return res.send({ success: true, message: 'User created.' });
+            }
+        })
     })
+
 
 }
 

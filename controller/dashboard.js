@@ -60,45 +60,52 @@ function uploadAvatar(req, res) {
     const user = req.session.user
     const upload = generalTools.upload.single('avatar');
 
-    upload(req, res, function(err) {
+    upload(req, res, async function(err) {
         if (err) {
             console.log(err);
             return res.status(500).json({ msg: "err" })
         }
         // res.redirect("/dashboard")
         if (user.avatar === './images/avatar/avatar.jpg') {
-            Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` },
-                function(err, docs) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        Users.findById(user._id, function(err, docs) {
-                            if (err) return res.send({ success: false, masage: err })
-                            req.session.user = docs;
-                            return res.redirect('/dashboard')
+            try {
+                const docs = await Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` }, { new: true })
+                req.session.user = docs;
+                return res.redirect('/dashboard')
 
-                        })
-                    }
-                })
+
+
+            } catch (error) {
+                console.log(err)
+
+            }
+
         } else {
             fs.unlinkSync(path.join(__dirname, `../public`, req.session.user.avatar))
-            Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` },
-                function(err, docs) {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        Users.findById(user._id, function(err, docs) {
-                            if (err) return res.send({ success: false, masage: err })
-                            req.session.user = docs;
-                            return res.redirect('/dashboard')
+            try {
+                const docs = await Users.findByIdAndUpdate(user._id, { avatar: `/images/avatar/${req.file.filename}` }, { new: true })
+                req.session.user = docs;
+                return res.redirect('/dashboard')
 
-                        })
-                    }
-                })
+            } catch (error) {
+                console.log(err)
 
+            }
         }
 
     })
 }
 
-module.exports = { updateUser, deleteUser, uploadAvatar }
+async function reset(req, res) {
+    try {
+        const hash = await bcrypt.hash(req.body.phone, 10)
+        Users.findByIdAndUpdate(req.body._id, { password: hash },
+            function(err, docs) {
+                if (err) return res.send(err);
+                res.redirect("/admin")
+            })
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+module.exports = { updateUser, deleteUser, uploadAvatar, reset }

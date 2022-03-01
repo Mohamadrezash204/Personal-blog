@@ -1,7 +1,6 @@
 const blog = require('express').Router();
 const Article = require('../models/Articles')
-const { isLoggedIn } = require('../middlewares/auth')
-const { editArticle, create, myArticles } = require('../controller/blog')
+const { editArticle, create, myArticles, deleteArticle, ArticleForRead } = require('../controller/blog')
 
 blog.get('/', (req, res) => {
     Article.find({}).sort({ createdAt: 'descending' }).populate('author').lean().exec((err, articles) => {
@@ -10,8 +9,10 @@ blog.get('/', (req, res) => {
     })
 })
 
-blog.post('/create', isLoggedIn, create)
-blog.get('/myArticles', isLoggedIn, myArticles)
-blog.post("/editArticle", isLoggedIn, editArticle)
+blog.post('/create', create)
+blog.get('/myArticles', myArticles)
+blog.post('/deleteArticle', deleteArticle)
+blog.post("/editArticle", editArticle)
+blog.get("/:articleid", ArticleForRead)
 
 module.exports = blog;

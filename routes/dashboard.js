@@ -10,7 +10,6 @@ router.get("/", isLoggedIn, function(req, res) {
 
 router.post("/delete", deleteUser)
 router.post('/update', updateUser)
-
 router.post('/uploadAvatar', isLoggedIn, uploadAvatar)
 
 router.post('/reset', isLoggedIn, isAdmin, reset)

@@ -4,35 +4,28 @@ const fs = require("fs")
 const path = require("path")
 const generalTools = require("../utils/multerAvatar")
 
-function updateUser(req, res) {
+async function updateUser(req, res) {
     const user = req.session.user;
-    //console.log(user);
-
     let edituser = {}
     req.body.username ? edituser.username = req.body.username : null;
     req.body.firstName ? edituser.firstName = req.body.firstName : null;
     req.body.lastName ? edituser.lastName = req.body.lastName : null;
     req.body.phone ? edituser.phone = req.body.phone : null;
     req.body.gender ? edituser.gender = req.body.gender : null;
-    if (req.body.password) {
-        bcrypt.hash(req.body.password, 10, function(err, hash) {
-            if (err) return (err);
-            edituser.password = hash;
-        });
-    }
-    Users.findByIdAndUpdate(user._id, edituser,
-        function(err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                Users.findById(user._id, function(err, docs) {
-                    if (err) return res.send({ success: false, masage: err })
-                    req.session.user = docs;
-                    return res.redirect('/dashboard')
+    if (!!req.body.password) {
+        try {
+            edituser.password = await bcrypt.hash(req.body.password, 10)
+        } catch (error) {
+            res.send(error)
 
-                })
-            }
-        })
+        }
+    }
+    try {
+        req.session.user = await Users.findByIdAndUpdate(user._id, edituser)
+        res.redirect('/dashboard')
+    } catch (error) {
+        res.send(error)
+    }
 }
 
 function deleteUser(req, res) {

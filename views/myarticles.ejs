@@ -25,6 +25,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <label for="repeatPaswordInput">متن:</label>
+
                         <input type="text" class="form-control" name="content" id="content" placeholder="متن">
                         <p id="repeatPaswordvalid"></p>
                     </div>
@@ -39,84 +40,92 @@
         <% for( let index=0 ; index < articles.length; index++ ) { %>
             <div dir="rtl" class="card" style="width: 100%">
                 <div dir="rtl" class="card-body">
-                    <h3>{
-                        <%= index+1 %> /
-                            <%= articles.length %>}</h3>
-                    <hr>
-                    <h5 dir="rtl" class="card-title">
-                        <%=articles[ index].title  %>: عنوان</h5>
-                    <hr>
-                    <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
-                        <%=articles[ index].createdAt  %>: نوشته شده در
-                    </h6>
-                    <hr>
-                    <p dir="rtl" class="card-text">
-                        <%=articles[ index].content %>
-                    </p>
-                    <hr>
-                    <p dir="rtl" class="card-text">
-                        نوشته شده توسط :
-                        <%=articles[ index].author %>
-                    </p>
-                    <hr>
-                    <div>
-                        <div class="d-flex justify-content-between">
-                            <p>بازدید ها :
-                                <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
-                            </p>
-                            <p> پسندیده :
-                                <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
-                            </p>
-                            <p>ناپسندیده :
-                                <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
-                            </p>
-                        </div>
-                        <hr>
-                        <div>
+                    <div class="d-flex justify-content-between m-3">
+                        <div dir="rtl" class="card-body" style="max-width: 65%">
 
-                            <input type="hidden" name="_id" value="<%=articles[index]._id%>" />
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                   ویرایش
-                                  </button>
+                            <h5 dir="rtl" class="card-title" style="text-overflow: ellipsis;">
+                                <%=articles[ index].title  %>: عنوان</h5>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <p dir="rtl" class="card-text">
+                                    نوشته شده توسط :
+                                    <%=articles[ index].author.firstName + " " + articles[ index ].author.lastName%>
+                                </p>
+                                <p dir="rtl" class="card-text">
+                                    در تاریخ :
+                                    <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>
+                                </p>
+                            </div>
+                            <hr>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
+                            <p class="card-text" style="white-space: nowrap;width:90%; overflow: hidden;text-overflow: ellipsis;">
+                                <%=articles[ index].content %>
+                            </p>
+                            <hr>
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <p>بازدید ها :
+                                        <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
+                                    </p>
+                                    <p> پسندیده :
+                                        <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
+                                    </p>
+                                    <p>ناپسندیده :
+                                        <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
+                                    </p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="readmore">
+                                        <button type="button" class="btn btn-primary" id="readmore" data-articleid="<%= articles[index]._id%>">مطالعه بیشتر</button>
+                                    </div>
+                                    <div>
 
-                                        <form action="/blog/editArticle" method="post">
-                                            <div class="modal-footer">
-                                                <input type="hidden" name="_id" value="<%=articles[index]._id%>" />
-                                                <div class="form-floating mb-3">
-                                                    <label for="repeatPaswordInput">عنوان :</label>
-                                                    <input type="text" class="form-control" name="title" id="title" placeholder="<%=articles[ index].title  %>">
-                                                    <p id="repeatPaswordvalid"></p>
+                                        <input type="hidden" name="_id" value="<%=articles[index]._id%>" />
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                           ویرایش
+                                          </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+
+                                                    <form action="/blog/editArticle" method="post">
+                                                        <div class="modal-footer">
+                                                            <input type="hidden" name="_id" value="<%=articles[index]._id%>" />
+                                                            <div class="form-floating mb-3">
+                                                                <label for="repeatPaswordInput">عنوان :</label>
+                                                                <input type="text" class="form-control" name="title" id="title" placeholder="<%=articles[ index].title  %>">
+                                                                <p id="repeatPaswordvalid"></p>
+                                                            </div>
+                                                            <div class="form-floating mb-3">
+                                                                <label for="repeatPaswordInput">متن:</label>
+                                                                <input type="text" class="form-control" name="content" id="content" placeholder="<%=articles[ index].content %> ">
+                                                                <p id="repeatPaswordvalid"></p>
+                                                            </div>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                            <button type="submit" class="btn btn-primary">ذخیره کردن</button>
+                                                        </div>
+                                                    </form>
+
                                                 </div>
-                                                <div class="form-floating mb-3">
-                                                    <label for="repeatPaswordInput">متن:</label>
-                                                    <input type="text" class="form-control" name="content" id="content" placeholder="<%=articles[ index].content %> ">
-                                                    <p id="repeatPaswordvalid"></p>
-                                                </div>
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                                                <button type="submit" class="btn btn-primary">ذخیره کردن</button>
                                             </div>
-                                        </form>
+                                        </div>
 
                                     </div>
+                                    <form action="/blog/deleteArticle" method="post">
+                                        <input type="hidden" name="id" value="<%=articles[index]._id%>" />
+                                        <button type="submit" class="btn btn-danger">حذف مقاله</button>
+                                    </form>
                                 </div>
                             </div>
-
-
-
-
+                        </div>
+                        <div style="max-width:35%" class="mr-2">
+                            <image class="img-thumbnail" style="max-width:100%;" src="<%= articles[index].image %>">
+                            </image>
 
                         </div>
-                        <div>
-                            <p>کامنت ها :</p>
-                            <div>
 
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

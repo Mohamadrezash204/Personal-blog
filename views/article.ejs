@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("./head.ejs",{title:"article"}) %>
+</head>
+
+<body>
+    <a class="btn btn-primary" style="z-index: 1; position: fixed ;top: 2px ;left: 2px" href="/home">بازگشت به خانه</a>
+    <div dir="rtl" class="card" style="width: 100%">
+        <div style="background-color:d7d7b8">
+            <div dir="rtl" class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 dir="rtl" class="card-title"> عنوان :
+                            <%=article.title %>
+                        </h5>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <p dir="rtl" class="card-text">
+                                نوشته شده توسط :
+                                <%= article.author.firstName + " " + article.author.lastName %>
+                            </p>
+                            <p dir="rtl" class="card-text">
+                                در تاریخ :
+                                <%=article.createdAt.toLocaleDateString('fa-IR')  %>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="max-width:400px;">
+                        <image class="img-thumbnail" style=" 
+                            width: 50%;
+                            height: auto;
+                          " src="<%=article.image %>">
+                        </image>
+                    </div>
+                </div>
+                <hr>
+                <p dir="rtl" class="card-text">
+                    <%=article.content %>
+                </p>
+                <hr>
+                <div>
+                    <div class="d-flex justify-content-between">
+                        <p>بازدید ها :
+                            <%=article.visitCount %>
+                        </p>
+                        <p> پسندیده :
+                            <button type="button" class="btn btn-danger" id="likebutton"><%= article.like %> </button>
+                        </p>
+                        <p>ناپسندیده :
+                            <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= article.dislike %> </a></button>
+                        </p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -17,3 +17,11 @@ bcrypt.hash('mypassword', 10, function(err, hash) {
 // // });
 // // console.log(hashchek);
 // if (bcrypt.compare('mypasswor', hash)) console.log(false);
+const isLoggedIn = (req, res, next) => {
+    if (!!req.session.user) {
+        res.locals.userInfo = req.session.user;
+        next();
+    }
+    res.locals.userInfo = null;
+    next();
+};

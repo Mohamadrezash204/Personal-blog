@@ -36,20 +36,29 @@ function editArticle(req, res) {
 
 function myArticles(req, res) {
     const user = req.session.user._id
-        // Article.findOne({ author: user }, function(err, articles) {
-        //     if (err) return res.send(err)
-        //     if (articles.length === 0) return res.send({ masage: "you dont have any articles" })
-        //     res.render('blog.ejs', { articles: articles })
-        // })
+
     Article.find({ author: user }).sort({ createdAt: 'descending' }).populate('author').exec((err, articles) => {
         if (err) return res.send(err)
         if (articles.length === 0) return res.send({ masage: "you dont have any articles" })
         res.render('myarticles.ejs', { articles: articles });
     })
 }
+async function deleteArticle(req, res) {
+    try {
+        await Article.findByIdAndDelete(req.body.id)
+        res.redirect("/blog/myArticles")
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+function ArticleForRead(req, res) {
+    Article.findByIdAndUpdate(req.params.articleid, { $inc: { visitCount: 1 } }).populate('author').lean().exec(function(err, article) {
+        if (err) { return res.send(err) }
+        res.render("article.ejs", { article: article })
+    })
+}
 
 
 
-
-
-module.exports = { editArticle, create, myArticles }
+module.exports = { editArticle, create, myArticles, deleteArticle, ArticleForRead }

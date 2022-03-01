@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 
 <head>
-    <%- include("./head.ejs",{title:"blog"}) %>
+    <%- include("./head.ejs",{title:"Blog"}) %>
+
 </head>
 
 <body>
     <div class="m-2 justify-content-between">
         <div class="d-flex justify-content-between is-position-absolute">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            <button type="button" class="btn btn-primary" style="position: fixed ;top: 0 ;right:0" data-toggle="modal" data-target="#exampleModalCenter">
             نوشتن مقاله
           </button>
 
-            <a class="btn btn-primary" href="/home/">بازگشت به خانه</a>
+            <a class="btn btn-primary" style="position: fixed ;top: 0 ;left: 0" href="/home">بازگشت به خانه</a>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -38,52 +39,60 @@
     <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
         <% for( let index=0 ; index < articles.length; index++ ) { %>
             <div dir="rtl" class="card" style="width: 100%">
-                <div dir="rtl" class="card-body">
-                    <h3>{
-                        <%= index+1 %> /
-                            <%= articles.length %>}</h3>
-                    <hr>
-                    <h5 dir="rtl" class="card-title">
-                        <%=articles[ index].title  %>: عنوان</h5>
-                    <hr>
-                    <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
-                        <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>: نوشته شده در
-                    </h6>
-                    <hr>
-                    <p dir="rtl" class="card-text">
-                        <%=articles[ index].content %>
-                    </p>
-                    <hr>
-                    <p dir="rtl" class="card-text">
-                        نوشته شده توسط :
-                        <%=articles[ index].author.firstName + " " + articles[ index ].author.lastName%>
-                    </p>
-                    <hr>
-                    <div>
+                <div class="d-flex justify-content-between m-3">
+                    <div dir="rtl" class="card-body" style="max-width: 65%">
+
+                        <h5 dir="rtl" class="card-title" style="text-overflow: ellipsis;">عنوان :
+                            <%=articles[ index].title  %>
+                        </h5>
+                        <hr>
                         <div class="d-flex justify-content-between">
-                            <p>بازدید ها :
-                                <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
+                            <p dir="rtl" class="card-text">
+                                نوشته شده توسط :
+                                <%=articles[ index].author.firstName + " " + articles[ index ].author.lastName%>
                             </p>
-                            <p> پسندیده :
-                                <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
-                            </p>
-                            <p>ناپسندیده :
-                                <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
+                            <p dir="rtl" class="card-text">
+                                در تاریخ :
+                                <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>
                             </p>
                         </div>
                         <hr>
+
+                        <p class="card-text" style="white-space: nowrap;width:90%; overflow: hidden;text-overflow: ellipsis;">
+                            <%=articles[ index].content %>
+                        </p>
+                        <hr>
                         <div>
-                            <p>کامنت ها :</p>
-                            <div>
+                            <div class="d-flex justify-content-between">
+                                <p>بازدید ها :
+                                    <%=articles[ index].visitCount %>
+                                </p>
+                                <p> پسندیده :
+                                    <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
+                                </p>
+                                <p>ناپسندیده :
+                                    <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
+                                </p>
+                            </div>
+                            <div class="readmore">
+                                <a class="btn btn-primary" href="blog/<%= articles[ index ]._id%>">مطالعه بیشتر</a>
 
                             </div>
                         </div>
                     </div>
+                    <div style="max-width:35%" class="mr-2">
+                        <image class="img-thumbnail" style="max-width:100%;" src="<%= articles[index].image %>">
+                        </image>
+
+                    </div>
+
                 </div>
             </div>
             <br>
             <% } %>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/javascripts/blogs.js"></script>
 </body>
 
 </html>

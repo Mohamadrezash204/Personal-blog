@@ -9,53 +9,57 @@
 <body>
     <div dir="rtl" class="container">
         <div class="row">
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="col-sm-11 col-md-9 col-lg-9 mx-auto">
                 <div class="card border-0 shadow rounded-3 my-5">
                     <div class="card-body p-4 p-sm-5">
-                        <h5 class="card-title text-center mb-5 fw-light fs-5">ثبت نام</h5>
+                        <h5 class="card-title text-center mb-5 fw-dark fs-5">ثبت نام</h5>
                         <form method="post" action="/auth/register" enctype="multipart/form-data">
-
-                            <div class="form-floating mb-3">
-                                <label for="firstNameInput">نام</label>
-                                <input type="text" class="form-control" name="firstName" id="firstNameInput" placeholder="نام">
-
-                                <p id="firstNamevalid"></p>
+                            <div class="d-flex justify-content-between">
+                                <div class="form-floating mb-1">
+                                    <label for="firstNameInput">نام</label>
+                                    <input type="text" class="form-control" name="firstName" id="firstNameInput" placeholder="نام">
+                                    <p id="firstNamevalid"></p>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <label for="lastNameInput">نام خانوادگی</label>
+                                    <input type="text" class="form-control" name="lastName" id="lastNameInput" placeholder="نام خانوادگی">
+                                    <p id="lastNamevalid"></p>
+                                </div>
                             </div>
-                            <div class="form-floating mb-3">
-                                <label for="lastNameInput">نام خانوادگی</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="form-floating mb-3">
+                                    <label for="UsernameInput">نام کاربری</label>
 
-                                <input type="text" class="form-control" name="lastName" id="lastNameInput" placeholder="نام خانوادگی">
-                                <p id="lastNamevalid"></p>
+                                    <input type="text" class="form-control" name="username" id="UsernameInput" placeholder="نام کاربری">
+                                    <p id="Usernamevalid"></p>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <label for="UsernameInput">تلفن همراه</label>
+
+                                    <input type="text" class="form-control" name="phone" id="UsernameInput" placeholder="تلفن همراه">
+                                    <p id="Usernamevalid"></p>
+                                </div>
                             </div>
-                            <div class="form-floating mb-3">
-                                <label for="UsernameInput">نام کاربری</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="form-floating mb-3">
+                                    <label for="paswordInput">رمز عبور</label>
 
-                                <input type="text" class="form-control" name="username" id="UsernameInput" placeholder="نام کاربری">
-                                <p id="Usernamevalid"></p>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <label for="UsernameInput">تلفن همراه</label>
+                                    <input type="password" class="form-control" name="password" id="paswordInput" placeholder="رمز عبور">
+                                    <p id="passwordvalid"></p>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <label for="repeatPaswordInput">تکرار رمز عبور</label>
 
-                                <input type="text" class="form-control" name="phone" id="UsernameInput" placeholder="تلفن همراه">
-                                <p id="Usernamevalid"></p>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <label for="paswordInput">رمز عبور</label>
+                                    <input type="password" class="form-control" id="repeatPaswordInput" placeholder="تکرار رمز عبور">
+                                    <p id="repeatPaswordvalid"></p>
+                                </div>
 
-                                <input type="password" class="form-control" name="password" id="paswordInput" placeholder="رمز عبور">
-                                <p id="passwordvalid"></p>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <label for="repeatPaswordInput">تکرار رمز عبور</label>
+                                <div class="form-floating mb-3">
+                                    <label for="UsernameInput">جنسیت</label>
 
-                                <input type="password" class="form-control" id="repeatPaswordInput" placeholder="تکرار رمز عبور">
-                                <p id="repeatPaswordvalid"></p>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <label for="UsernameInput">جنسیت</label>
-
-                                <input type="text" class="form-control" name="gender" id="UsernameInput" placeholder="male or female" autocomplete="true">
-                                <p id="Usernamevalid"></p>
+                                    <input type="text" class="form-control" name="gender" id="UsernameInput" placeholder="male or female" autocomplete="true">
+                                    <p id="Usernamevalid"></p>
+                                </div>
                             </div>
                             <div class="form-floating mb-3">
                                 <label for="avatar">عکس کاربری</label>

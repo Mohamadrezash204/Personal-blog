@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="Fa" dir="rtl">
 
 <head>
     <%- include("./head.ejs") %>
@@ -7,50 +7,61 @@
 
 <body>
     <%- include("./navbar.ejs") %>
-        <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
-            <% for( let index=0 ; index <= articles.length; index++ ) { %>
+        <div class="col-sm-12 col-md-10 col-lg-8 mx-auto mt-2">
+            <% for( let index = 0; index < articles.length; index++ ) { %>
                 <div dir="rtl" class="card" style="width: 100%">
-                    <div dir="rtl" class="card-body">
-                        <h5 dir="rtl" class="card-title">
-                            <%=articles[ index].title  %>: عنوان</h5>
-                        <hr>
-                        <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
-                            <%=articles[ index].createdAt  %>: نوشته شده در
-                        </h6>
-                        <hr>
-                        <p dir="rtl" class="card-text">
-                            <%=articles[ index].content %>
-                        </p>
-                        <hr>
-                        <p dir="rtl" class="card-text">
-                            <%=articles[ index].author %>
-                        </p>
-                        <hr>
-                        <div>
-                            <div class="d-flex justify-content-between">
-                                <p>بازدید ها :
-                                    <button type="button" class="btn btn-danger"><%=articles[index].view %> </button>
-                                </p>
-                                <p> پسندیده :
-                                    <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
-                                </p>
-                                <p>ناپسندیده :
-                                    <button type="button" class="btn btn-danger" id="dislikebutton"><%= articles[ index].dislike %> </button>
-                                </p>
-                            </div>
+                    <div class="d-flex justify-content-between m-3">
+                        <div dir="rtl" style="width : 65%;">
+                            <h5 class="card-title">
+                                عنوان :
+                                <%=articles[ index].title  %>
+                            </h5>
+                            <hr>
+                            <p class="card-text">
+                                نوشته شده توسط :
+                                <%=articles[ index].author.firstName+"  "+articles[ index].author.lastName%>
+                            </p>
+                            <hr>
+                            <h6 dir="rtl" class="card-subtitle mb-2 text-muted">
+                                ثبت شده در تاریخ :
+                                <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>
+                            </h6>
+                            <hr>
+                            <p dir="rtl" class="card-text" style="white-space: nowrap;width:90%; overflow: hidden;text-overflow: ellipsis;">
+                                <%=articles[ index].content %>
+                            </p>
                             <hr>
                             <div>
-                                <p>کامنت ها :</p>
-                                <div>
+                                <div class="d-flex justify-content-between">
+                                    <p>بازدید :
+                                        <%=articles[index].visitCount %>
+                                    </p>
+                                    <p> پسندیده :
+                                        <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
+                                    </p>
+                                    <p>ناپسندیده :
+                                        <button type="button" class="btn btn-danger" id="dislikebutton"><%= articles[ index].dislike %> </button>
+                                    </p>
+                                </div>
+                                <div class="readmore">
+                                    <a class="btn btn-primary" href="blog/<%= articles[ index ]._id%>">مطالعه بیشتر</a>
 
                                 </div>
                             </div>
                         </div>
+                        <div style="width:35%" class="mr-2">
+                            <image class="img-thumbnail" style="max-width:100%;" src="<%= articles[index].image %> "></image>
+                        </div>
                     </div>
+
+
                 </div>
                 <br>
+
                 <% } %>
+
         </div>
+
 
 
 

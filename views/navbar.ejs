@@ -1,16 +1,17 @@
 <nav dir="rtl" class=" navbar navbar-expand-lg navbar-dark bg-dark ">
-    <a class="navbar-brand " href="/ ">παράθυρο</a>
+    <a class="navbar-brand " href="/home">خرده واژه</a>
     <button class="navbar-toggler " type="button " data-toggle="collapse " data-target="#navbarSupportedContent " aria-controls="navbarSupportedContent " aria-expanded="false " aria-label="Toggle navigation ">
       <span class="navbar-toggler-icon "></span>
     </button>
-
     <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent ">
         <div>
 
             <ul class="navbar-nav mr-auto ">
                 <li class="nav-item active ">
                     <a class="nav-link " href="/blog">بلاگ </a>
+
                 </li>
+
                 <li class="nav-item ">
 
                     <a class="nav-link" id="status" href="<%=statuses%> ">
@@ -18,6 +19,9 @@
                     </a>
                 </li>
                 <% if(status !== "ورود"){ %>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/blog/Myfavorite">مورد علاقه ها</a>
+                    </li>
                     <li class="nav-item dropdown ">
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -27,10 +31,10 @@
                             <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuLink">
 
                                 <form action="/blog/myArticles" method="get"><button type="submit" class="dropdown-item text-light">نوشته های من</button></form>
-
-                                <a class="dropdown-item text-light" href="#">Another action</a>
-
-                                <form action="/auth/logout" method="get"><button type="submit" class="dropdown-item text-light">خارج شدن از حساب</button></form>
+                                <% if (statuses==="/admin") { %>
+                                    <form action="/dashboard" method="get"><button type="submit" class="dropdown-item text-light">پروفایل</button></form>
+                                    <% } %>
+                                        <form action="/auth/logout" method="get"><button type="submit" class="dropdown-item text-light">خارج شدن از حساب</button></form>
 
                             </div>
                         </div>

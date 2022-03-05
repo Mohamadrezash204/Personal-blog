@@ -19,6 +19,7 @@ function login(req, res) {
             if (err) { throw (err); }
             if (result) {
                 req.session.user = user;
+                req.session.user.password = "";
                 return res.redirect('/home')
             }
             return res.send("the password is incorrect");
@@ -46,7 +47,7 @@ function register(req, res) {
         })
         const newUser = {}
         if (req.file) {
-            newUser.avatar = `./images/avatar/${req.file.filename}`
+            newUser.avatar = `/images/avatar/${req.file.filename}`
         }
         newUser.username = req.body.username
         newUser.firstName = req.body.firstName
@@ -64,8 +65,6 @@ function register(req, res) {
             }
         })
     })
-
-
 }
 
 module.exports = { loginpage, login, registerpage, register }

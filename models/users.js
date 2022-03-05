@@ -46,7 +46,7 @@ const UserSchema = new Schema({
     },
     avatar: {
         type: String,
-        default: './images/avatar/avatar.jpg'
+        default: '/images/avatar/avatar.jpg'
     },
     phone: {
         type: String,
@@ -68,7 +68,15 @@ const UserSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    block: {
+        default: false
+    },
+    favorites: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Article'
+    }]
+
 }, { timestamps: true });
 UserSchema.plugin(uniqueValidator, { message: 'this is already taken.' });
 
@@ -81,7 +89,15 @@ UserSchema.pre('save', function async(next) {
             .catch(err => next(err));
     }
 });
-
-
+// UserSchema.pre('findOneAndUpdate', function async(next) {
+//     const user = this._doc;
+//     if (this.isNew || this.isModified('password')) {
+//         const salt = bcrypt.genSalt(10);
+//         salt.then(salt => { return bcrypt.hash(user.password, salt); })
+//             .then(hash => { user.password = hash; return next(); })
+//             .catch(err => next(err));
+//     }
+// });
+// UserSchema.post('findOneAndUpdate', function async(next))
 
 module.exports = mongoose.model('User', UserSchema);

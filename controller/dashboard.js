@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt")
 const Users = require("../models/users")
+const Articles = require("../models/Articles")
 const fs = require("fs")
 const path = require("path")
 const generalTools = require("../utils/multerAvatar")
+
 
 async function updateUser(req, res) {
     const user = req.session.user;
@@ -28,50 +30,42 @@ async function updateUser(req, res) {
     }
 }
 
-function deleteUser(req, res) {
+async function deleteUser(req, res) {
     let userid;
-    if (req.session.user.role === 'admin') { userid = req.body._id } else { userid = req.session.user._id };
-
-    Users.findByIdAndDelete(userid, function(err, docs) {
-        if (err) {
-            console.log(err)
+    try {
+        if (req.session.user.role === 'admin') { userid = req.body._id } else { userid = req.session.user._id };
+        await Articles.deleteMany({ author: userid });
+        await Users.findByIdAndDelete(userid);
+        if (req.session.user.role === "admin") {
+            res.redirect("/admin")
         } else {
-            if (req.session.user.role === "admin") {
-                res.redirect("/admin")
-            } else {
-                res.send({ success: true, message: `deleted ${docs}` })
-                res.redirect("/auth/register")
-
-            }
+            res.send({ success: true, message: `deleted ${docs}` })
+            res.redirect("/auth/register")
 
         }
+    } catch (error) {
+        res.send(error)
 
-    });
+    }
 }
 
 function uploadAvatar(req, res) {
     const user = req.session.user
     const upload = generalTools.upload.single('avatar');
-
     upload(req, res, async function(err) {
         if (err) {
             console.log(err);
             return res.status(500).json({ msg: "err" })
         }
         // res.redirect("/dashboard")
-        if (user.avatar === './images/avatar/avatar.jpg') {
+        if (user.avatar === '/images/avatar/avatar.jpg') {
             try {
                 const docs = await Users.findByIdAndUpdate(user._id, { avatar: `./images/avatar/${req.file.filename}` }, { new: true })
                 req.session.user = docs;
                 return res.redirect('/dashboard')
-
-
-
             } catch (error) {
                 console.log(err)
-
             }
-
         } else {
             fs.unlinkSync(path.join(__dirname, `../public`, req.session.user.avatar))
             try {
@@ -81,7 +75,6 @@ function uploadAvatar(req, res) {
 
             } catch (error) {
                 console.log(err)
-
             }
         }
 

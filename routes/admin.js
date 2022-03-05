@@ -4,10 +4,11 @@ const User = require('../models/users')
 
 /* GET users listing. */
 router.get('/', function(req, res) {
-
+    const data = req.session.nav;
     User.find({}, (err, users) => {
         if (err) return logger.error(err)
-        res.render('admin', { users });
+        data.users = users;
+        res.render('admin', data);
 
     })
 });

@@ -7,92 +7,162 @@
 </head>
 
 <body>
-    <div class="m-2 justify-content-between">
-        <div class="d-flex justify-content-between is-position-absolute">
-            <button type="button" class="btn btn-primary" style="position: fixed ;top: 0 ;right:0" data-toggle="modal" data-target="#exampleModalCenter">
-            نوشتن مقاله
-          </button>
+    <%- include("./navbar.ejs") %>
+        <button type="button" class="btn btn-dark" style="position: fixed; bottom:10px;right: 10px;" data-toggle="modal" data-target="#myModal">نوشتن مقاله جدید</button>
 
-            <a class="btn btn-primary" style="position: fixed ;top: 0 ;left: 0" href="/home">بازگشت به خانه</a>
-        </div>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <form action="/blog/create" method="post">
-                <div class="modal-footer">
-                    <div class="form-floating mb-3">
-                        <label for="repeatPaswordInput">عنوان :</label>
-                        <input type="text" class="form-control" name="title" id="title" placeholder=" عنوان">
-                        <p id="repeatPaswordvalid"></p>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">جزئیات مقاله خود را وارد کنید</h4>
                     </div>
-                    <div class="form-floating mb-3">
-                        <label for="repeatPaswordInput">متن:</label>
-                        <input type="text" class="form-control" name="content" id="content" placeholder="متن">
-                        <p id="repeatPaswordvalid"></p>
-                    </div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                    <button type="submit" class="btn btn-primary">ذخیره کردن</button>
-            </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
-        <% for( let index=0 ; index < articles.length; index++ ) { %>
-            <div dir="rtl" class="card" style="width: 100%">
-                <div class="d-flex justify-content-between m-3">
-                    <div dir="rtl" class="card-body" style="max-width: 65%">
-
-                        <h5 dir="rtl" class="card-title" style="text-overflow: ellipsis;">عنوان :
-                            <%=articles[ index].title  %>
-                        </h5>
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                            <p dir="rtl" class="card-text">
-                                نوشته شده توسط :
-                                <%=articles[ index].author.firstName + " " + articles[ index ].author.lastName%>
-                            </p>
-                            <p dir="rtl" class="card-text">
-                                در تاریخ :
-                                <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>
-                            </p>
-                        </div>
-                        <hr>
-
-                        <p class="card-text" style="white-space: nowrap;width:90%; overflow: hidden;text-overflow: ellipsis;">
-                            <%=articles[ index].content %>
-                        </p>
-                        <hr>
-                        <div>
-                            <div class="d-flex justify-content-between">
-                                <p>بازدید ها :
-                                    <%=articles[ index].visitCount %>
-                                </p>
-                                <p> پسندیده :
-                                    <button type="button" class="btn btn-danger" id="likebutton"><%= articles[ index].like %> </button>
-                                </p>
-                                <p>ناپسندیده :
-                                    <button type="button" class="btn btn-danger" id="dislikebutton">  <a><%= articles[ index].dislike %> </a></button>
-                                </p>
+                    <div class="modal-body">
+                        <form action="/blog/create" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="form-floating mb-3">
+                                    <label for="repeatPaswordInput">عنوان :</label>
+                                    <input type="text" class="form-control" name="title" id="title" placeholder=" عنوان">
+                                    <p id="repeatPaswordvalid"></p>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <label for="repeatPaswordInput">متن:</label>
+                                    <textarea type="text" class="form-control" name="content" id="content" rows="5" placeholder="متن خود را وارد کنید"></textarea>
+                                    <p id="repeatPaswordvalid"></p>
+                                </div>
+                                <input type="file" name="image" placeholder="عکس نمایه مقاله را انتخاب کنید ">
+                                <button type="submit" class="btn btn-primary m-2">ذخیره کردن</button>
                             </div>
-                            <div class="readmore">
-                                <a class="btn btn-primary" href="blog/<%= articles[ index ]._id%>">مطالعه بیشتر</a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div style="max-width:35%" class="mr-2">
-                        <image class="img-thumbnail" style="max-width:100%;" src="<%= articles[index].image %>">
-                        </image>
-
+                        </form>
                     </div>
 
                 </div>
+
             </div>
-            <br>
-            <% } %>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/javascripts/blogs.js"></script>
+        </div>
+
+
+
+        <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+            <% for( let index=0 ; index < articles.length; index++ ) { %>
+                <div dir="rtl" class="card" style="width: 100% ">
+                    <div class="d-flex justify-content-between m-3">
+                        <div dir="rtl" class="card-body" style="max-width: 65%">
+
+                            <h5 dir="rtl" class="card-title" style="text-overflow: ellipsis;">عنوان :
+                                <%=articles[ index].title  %>
+                            </h5>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <p dir="rtl" class="card-text">
+                                    نوشته شده توسط :
+                                    <%=articles[ index].author.firstName + " " + articles[ index ].author.lastName%>
+                                </p>
+                                <p dir="rtl" class="card-text">
+                                    در تاریخ :
+                                    <%=articles[ index].createdAt.toLocaleDateString('fa-IR')  %>
+                                </p>
+                            </div>
+                            <hr>
+
+                            <p class="card-text" style="white-space: nowrap;width:90%; overflow: hidden;text-overflow: ellipsis;">
+                                <%=articles[ index].content %>
+                            </p>
+                            <hr>
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <p>بازدید ها :
+                                        <%=articles[ index].visitCount %>
+                                    </p>
+
+
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <% if (statuses==="/admin") { %>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter-<%=articles[index]._id%>">حذف مقاله</button>
+
+                                            <!-- Modal -->
+                                            <div id="exampleModalCenter-<%=articles[index]._id%>" class="modal fade" role="dialog">
+                                                <div class="modal-dialog">
+
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">آیا برای حذف مقاله اطمینان دارید ؟</h4>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <form action="/blog/deleteArticle" method="post">
+                                                                <input type="hidden" name="id" value="<%=articles[index]._id%>" />
+                                                                <button type="submit" class="btn btn-danger">حذف مقاله</button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <% } %>
+
+                                    </div>
+                                    <form action="/blog/Myfavorite" method="post">
+                                        <input type="hidden" name="id" value="<%=articles[index]._id%>">
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                              <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path>
+                            </svg>
+                                            علاقه مندی
+                                          </button>
+                                    </form>
+                                    <div class="readmore">
+                                        <a class="btn btn-primary" href="blog/<%= articles[ index ]._id%>">مطالعه بیشتر</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="max-width:35%" class="mr-2">
+                            <image class="img-thumbnail" style="max-width:100%;" src="<%= articles[index].image %>">
+                            </image>
+
+                        </div>
+
+                    </div>
+                </div>
+                <br>
+                <% } %>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item">
+                                <a id="page-firs" class="page-link" href="/blog/page/<%= page1 %>">
+                                    <%= page1 %>
+                                </a>
+                            </li>
+
+                            <li class="page-item active">
+                                <a id="page-second" class="page-link" href="/blog/page/<%= page2  %>">
+                                    <%= page2 %>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a id="page-third" class="page-link" href="/blog/page/<%= page3 %>">
+                                    <%= page3 %>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/javascripts/blogs.js"></script>
 </body>
 
 </html>

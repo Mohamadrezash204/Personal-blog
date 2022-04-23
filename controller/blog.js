@@ -2,7 +2,8 @@ const Article = require("../models/Articles");
 const User = require("../models/users");
 const generalTools = require("../utils/multerArticle")
 const fs = require("fs")
-const path = require("path")
+const path = require("path");
+const Comment = require("../models/Comment")
 
 function create(req, res) {
 
@@ -15,9 +16,10 @@ function create(req, res) {
             if (req.file) {
                 NewArticle.image = `/images/article/ArticlesImage/${req.file.filename}`
             }
-            NewArticle.title = req.body.title
-            NewArticle.content = req.body.content
-            NewArticle.author = req.session.user
+            NewArticle.title = req.body.title;
+            NewArticle.content = req.body.content;
+            NewArticle.author = req.session.user;
+            NewArticle.Category = [req.body.Category];
             Article.create(NewArticle, function(err, result) {
                 if (err) return res.send({ success: false, message: err });
                 if (result) {
@@ -44,26 +46,49 @@ function editArticle(req, res) {
             if (err) {
                 console.log(err)
             } else {
-                res.redirect('/blog/myArticles')
+                res.redirect('/blog/UserArticles')
             }
         })
 }
 
-function myArticles(req, res) {
-    const user = req.session.user
-    const DataForRender = req.session.nav;
-    Article.find({ author: user }).sort({ createdAt: 'descending' }).populate('author').exec((err, articles) => {
-        if (err) return res.send(err)
+async function UserArticles(req, res) {
+    try {
+        var user;
+        const DataForRender = req.session.nav;
+        if (req.session.user.role === "user") {
+            user = req.session.user;
+            DataForRender.title = `My Articles`;
+        }
+        if (req.session.user.role === "admin") {
+            if (!!req.body.user) {
+                user = await User.findById(req.body.user);
+                DataForRender.title = `${user.firstName} ${user.lastName} Articles`;
+            } else {
+                user = req.session.user;
+                DataForRender.title = `My Articles`;
+            }
+        }
+        const articles = await Article.find({ author: user._id }).sort({ createdAt: 'descending' }).populate('author');
         if (articles.length === 0) return res.send({ masage: "you dont have any articles" })
         DataForRender.articles = articles;
-        res.render('myarticles.ejs', DataForRender);
-    })
+
+        res.render('UserArticles.ejs', DataForRender);
+
+    } catch (error) {
+        res.send({ error: error })
+
+    }
 }
 async function deleteArticle(req, res) {
     try {
-        let article = await Article.findById(req.body.id).populate('author');
-        await Article.findByIdAndDelete(req.body.id)
-        if (req.session.role === "user") return res.redirect("/blog/myArticles");
+        let article = await Article.findById(req.body.id).populate('author').populate("Comment").lean();
+        if (article.image !== "https://www.kindpng.com/picc/m/79-792364_write-icon-symbol-design-sign-on-message-graphic.png")
+            fs.unlinkSync(path.join(__dirname, `../public`, article.image))
+        for (const comment of article.Comment) {
+            await Comment.findByIdAndDelete(comment._id)
+        }
+        await Article.findByIdAndDelete(article._id)
+        if (req.session.role === "user") return res.redirect("/blog/UserArticles");
 
         if (req.session.user.role === "admin") return res.redirect("/blog");
 
@@ -72,13 +97,16 @@ async function deleteArticle(req, res) {
     }
 }
 
-function ArticleForRead(req, res) {
-    const DataForRender = req.session.nav
-    Article.findByIdAndUpdate(req.params.articleid, { $inc: { visitCount: 1 } }).populate('author').lean().exec(function(err, article) {
-        if (err) { return res.send(err) }
-        DataForRender.article = article;
+async function ArticleForRead(req, res) {
+    try {
+        const DataForRender = req.session.nav;
+        DataForRender.article = await Article.findByIdAndUpdate(req.params.articleid, { $inc: { visitCount: 1 } }).populate('author').populate('Comment').lean();
         res.render("article.ejs", DataForRender)
-    })
+    } catch (error) {
+        res.send(error.message)
+
+    }
+
 }
 
 function uploadImage(req, res) {
@@ -95,7 +123,7 @@ function uploadImage(req, res) {
         if (article.image === "https://www.kindpng.com/picc/m/79-792364_write-icon-symbol-design-sign-on-message-graphic.png") {
             try {
                 await Article.findByIdAndUpdate(id, { image: `/images/article/ArticlesImage/${req.file.filename}` }, { new: true })
-                res.redirect("/blog/myArticles")
+                res.redirect("/blog/UserArticles")
 
             } catch (error) {
                 console.log(err)
@@ -106,7 +134,7 @@ function uploadImage(req, res) {
             try {
                 fs.unlinkSync(path.join(__dirname, `../public`, article.image))
                 await Article.findByIdAndUpdate(id, { image: `/images/article/ArticlesImage/${req.file.filename}` }, { new: true })
-                res.redirect("/blog/myArticles")
+                res.redirect("/blog/UserArticles")
 
             } catch (error) {
                 console.log(err)
@@ -120,9 +148,11 @@ async function SendFavorite(req, res) {
     try {
         const user = await User.findById(req.session.user._id)
         const article = await Article.find({ '_id': { $in: user.favorites } }).populate('author').lean()
+        if (!article) return res.send("چنین مقاله ای وجود ندارد")
         const DataForRender = req.session.nav
         DataForRender.articles = article;
-        res.render("myarticles", DataForRender)
+        DataForRender.title = "MyFavorite";
+        res.render("UserArticles", DataForRender)
 
     } catch (error) {
         res.send({ msg: error.message });
@@ -131,8 +161,10 @@ async function SendFavorite(req, res) {
 async function Favorite(req, res) {
     try {
         const article = await Article.findById(req.body.id);
+        if (!article) return res.send("چنیین مقاله ای وجود ندارد")
 
         await User.findByIdAndUpdate(req.session.user._id, { "$push": { "favorites": article._id } });
+        res.json({ "success": true })
 
     } catch (error) {
         res.send(error);
@@ -140,5 +172,32 @@ async function Favorite(req, res) {
     }
 
 }
+async function addcomments(req, res) {
 
-module.exports = { editArticle, create, myArticles, deleteArticle, ArticleForRead, uploadImage, SendFavorite, Favorite }
+    try {
+        const comment = await Comment.create({ text: req.body.text, Writtenby: req.session.user._id })
+
+        const findinarticle = await Article.findById(req.params.articleid);
+        if (!!findinarticle)
+            await Article.findByIdAndUpdate(req.params.articleid, { "$push": { "Comment": comment._id } })
+        if (!findinarticle) await Comment.findByIdAndUpdate(req.body.id, { "$push": { "Comments": comment._id } })
+        res.redirect(`/blog/${req.params.articleid}`)
+    } catch (error) {
+        res.send(error.message)
+    }
+
+}
+
+async function deleteComment(req, res) {
+    try {
+
+        await Comment.findByIdAndDelete(req.body.id);
+        res.redirect(`/blog/${req.params.articleid}`)
+
+    } catch (error) {
+        res.send(error.message)
+
+    }
+}
+
+module.exports = { editArticle, create, UserArticles, deleteArticle, ArticleForRead, uploadImage, SendFavorite, Favorite, addcomments, deleteComment }

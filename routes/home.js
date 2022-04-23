@@ -3,8 +3,8 @@ const Articles = require('../models/Articles');
 
 home.get("/", async function(req, res) {
     try {
-        const article = await Articles.find({ top: true }).sort({ createdAt: 'descending' }).populate('author').lean()
-        if (req.session.user) {
+        const article = await Articles.find({ top: true }).sort({ createdAt: 'descending' }).populate('author').lean();
+        if (!!req.session.user) {
             if (req.session.user.role == "user") {
                 req.session.nav = { lastName: req.session.user.lastName, firstName: req.session.user.firstName, avatar: req.session.user.avatar, role: "کاربر", status: "پروفایل", statuses: "/dashboard" }
                 res.locals.nav = { lastName: req.session.user.lastName, firstName: req.session.user.firstName, avatar: req.session.user.avatar, role: "کاربر", status: "پروفایل", statuses: "/dashboard" }
@@ -27,4 +27,5 @@ home.get("/", async function(req, res) {
     }
 
 })
+
 module.exports = home;

@@ -2,18 +2,21 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
-const multer = require('multer')
+const fs = require("fs")
 const bcrypt = require('bcryptjs');
 const UserSchema = new Schema({
     firstName: {
         type: String,
         trim: true,
-        required: [true, 'First name is required']
+        required: [true, 'First name is required'],
+        minLength: [3, "invalid firstName"]
+
     },
     lastName: {
         type: String,
         trim: true,
-        required: [true, 'Last name is required']
+        required: [true, 'Last name is required'],
+        minLength: [3, "invalid lastName"]
     },
     password: {
         type: String,
@@ -82,13 +85,16 @@ UserSchema.plugin(uniqueValidator, { message: 'this is already taken.' });
 
 UserSchema.pre('save', function async(next) {
     const user = this._doc;
-    if (this.isNew || this.isModified('password')) {
+    if (this.isModified('password')) {
         const salt = bcrypt.genSalt(10);
         salt.then(salt => { return bcrypt.hash(user.password, salt); })
             .then(hash => { user.password = hash; return next(); })
             .catch(err => next(err));
     }
 });
+// UserSchema.pre(/^Delete/, function(next) {
+//         fs.unlinkSync(path.join(__dirname, `../public`, this.avatar));
+//     })
 // UserSchema.pre('findOneAndUpdate', function async(next) {
 //     const user = this._doc;
 //     if (this.isNew || this.isModified('password')) {

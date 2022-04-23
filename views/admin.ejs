@@ -63,6 +63,11 @@
                                 <input type="hidden" name="_id" value="<%=users[index]._id%>" />
                                 <button type="submit" class="btn btn-danger m-2">حذف اکانت</button>
                             </form>
+                            <form action="/blog/UserArticles" method="post">
+                                <input type="hidden" name="user" value="<%=users[index]._id%>" />
+                                <button type="submit" class="btn btn-primary m-2">مقالات
+                                </button>
+                            </form>
                         </div>
 
                     </div>

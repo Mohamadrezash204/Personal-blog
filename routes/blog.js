@@ -3,14 +3,17 @@ const Article = require('../models/Articles')
 const {
     editArticle,
     create,
-    myArticles,
+    UserArticles,
     deleteArticle,
     ArticleForRead,
     uploadImage,
     Favorite,
-    SendFavorite
+    SendFavorite,
+    addcomments,
+    deleteComment
 } = require('../controller/blog')
-const { isAuthor } = require('../middlewares/auth')
+const { isAuthor, isLoggedIn, isAdmin } = require('../middlewares/auth');
+const { get } = require('mongoose');
 blog.get(['/', "/page/:page"], (req, res) => {
     const DataForRender = req.session.nav;
     var page = 1;
@@ -34,13 +37,14 @@ blog.get(['/', "/page/:page"], (req, res) => {
         })
 })
 blog.post('/create', create)
-blog.get('/myArticles', myArticles)
+blog.route("/UserArticles").get(UserArticles).post(UserArticles)
 blog.post('/deleteArticle', isAuthor, deleteArticle)
 blog.post("/editArticle", isAuthor, editArticle)
 blog.route("/Myfavorite").post(Favorite).get(SendFavorite);
 blog.post('/uploadImage/:id', isAuthor, uploadImage)
 blog.get("/:articleid", ArticleForRead)
-
+blog.post("/:articleid/comments", isLoggedIn, addcomments)
+blog.post("/:articleid/deleteComment", isAdmin, deleteComment)
 
 
 

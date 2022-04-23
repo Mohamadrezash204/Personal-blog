@@ -13,7 +13,6 @@ const avatarStorage = multer.diskStorage({
 });
 
 
-
 generalTools.upload = multer({
     storage: avatarStorage,
     fileFilter: function(req, file, cb) {
@@ -22,7 +21,9 @@ generalTools.upload = multer({
             return cb('invalid type!', false)
         }
         cb(null, true)
-    }
+    },
+    // limit:
+
 });
 
 module.exports = generalTools;

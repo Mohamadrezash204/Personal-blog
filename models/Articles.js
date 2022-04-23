@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const articleSchema = new Schema({
     title: {
         type: String,
         trim: true,
     },
     content: {
+        type: String,
+        trim: true,
+    },
+    Description: {
         type: String,
         trim: true,
     },
@@ -37,6 +42,12 @@ const articleSchema = new Schema({
     top: {
         type: Boolean,
         default: false
-    }
+    },
+    Comment: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
+    Category: [{ type: String, default: 'عمومی', enum: ["کانون", "موسیقی", "شعر", "نوشته", "تاریخ", "سیاست", "فلسفه", "هنر", "روانشناسی", "داستان", "سینما"] }]
 }, { timestamps: true });
-module.exports = mongoose.model('Article', articleSchema);
+
+module.exports = mongoose.model('Articles', articleSchema);

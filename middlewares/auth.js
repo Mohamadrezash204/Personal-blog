@@ -27,12 +27,10 @@ async function isAuthor(req, res, next) {
 
     const article = await Article.findById(articleid).populate('author').lean();
 
-    if (req.session.user.avatar !== article.author.avatar && req.session.user.role !== "admin") {
+    if (req.session.user.username !== article.author.username && req.session.user.role !== "admin") {
         return res.send("شما نمی توانید تغییر ایجاد کنید")
     }
     next()
-
-
 }
 
 module.exports = {

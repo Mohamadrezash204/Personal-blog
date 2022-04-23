@@ -1,0 +1,42 @@
+<button type="button" class="btn btn-dark" style="position: fixed; bottom:10px;right: 10px;" data-toggle="modal" data-target="#myModal">نوشتن </button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">جزئیات مقاله خود را وارد کنید</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/blog/create" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <label for="repeatPaswordInput">عنوان :</label>
+                            <input type="text" class="form-control" name="title" id="title" placeholder=" عنوان">
+
+                            <p id="repeatPaswordvalid"></p>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="repeatPaswordInput">متن:</label>
+                            <div>
+
+                                <textarea type="text" id="area2" cols="60" class="form-control" name="content" rows="5" style="width: 100%;" placeholder="متن خود را وارد کنید"></textarea>
+                            </div>
+                        </div>
+                        <label for="category">در دسته :</label>
+                        <input type="text" name="Category" class="col-10" placeholder="کانون, موسیقی, شعر, نوشته, تاریخ, سیاست, فلسفه, هنر, روانشناسی, داستان, سینما">
+
+                        <div class="d-flex justify-content-between">
+                            <input type="file" name="image" placeholder="عکس نمایه مقاله را انتخاب کنید ">
+                            <button type="submit" class="btn btn-primary m-2">ذخیره کردن</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

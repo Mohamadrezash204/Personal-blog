@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt")
 const Users = require("../models/users")
 const Articles = require("../models/Articles")
+const Comments = require("../models/Comment")
 const fs = require("fs")
 const path = require("path")
 const generalTools = require("../utils/multerAvatar")
@@ -33,15 +34,29 @@ async function updateUser(req, res) {
 async function deleteUser(req, res) {
     let userid;
     try {
-        if (req.session.user.role === 'admin') { userid = req.body._id } else { userid = req.session.user._id };
+        if (req.session.user.role === 'admin') {
+            userid = req.body._id
+            const user = await Users.findById(userid);
+            if (user.avatar !== '/images/avatar/avatar.jpg')
+                fs.unlinkSync(path.join(__dirname, `../public`, user.avatar))
+        } else {
+            userid = req.session.user._id
+            fs.unlinkSync(path.join(__dirname, `../public`, req.session.user.avatar))
+        };
+        const articles = await Articles.find({ author: userid });
+        for (const article of articles) {
+            fs.unlinkSync(path.join(__dirname, `../public`, article.image));
+        }
         await Articles.deleteMany({ author: userid });
+        await Comments.deleteMany({ Writtenby: userid });
+
         await Users.findByIdAndDelete(userid);
+
         if (req.session.user.role === "admin") {
             res.redirect("/admin")
         } else {
             res.send({ success: true, message: `deleted ${docs}` })
             res.redirect("/auth/register")
-
         }
     } catch (error) {
         res.send(error)
@@ -83,12 +98,20 @@ function uploadAvatar(req, res) {
 
 async function reset(req, res) {
     try {
-        const hash = await bcrypt.hash(req.body.phone, 10)
-        Users.findByIdAndUpdate(req.body._id, { password: hash },
-            function(err, docs) {
-                if (err) return res.send(err);
-                res.redirect("/admin")
-            })
+        // const hash = await bcrypt.hash(req.body.phone, 10)
+        // Users.findByIdAndUpdate(req.body._id, { password: hash },
+        //     function(err, docs) {
+        //         if (err) return res.send(err);
+        //         res.redirect("/admin")
+        //     })
+        const user = await Users.findById(req.body._id)
+
+        user.password = user.phone
+        await user.save({
+            validateBeforeSave: false
+        })
+
+        res.redirect("/admin")
     } catch (error) {
         res.send(error)
     }
